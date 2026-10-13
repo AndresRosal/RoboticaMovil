@@ -11,7 +11,7 @@ A continuación, presento un vídeo que muestra el comportamiento del robot en e
 <!-- Contenedor del video -->
 <div style="text-align: center; margin: 20px 0;">
     <video width="100%" controls style="border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.2);">
-        <source src="video-practica.mp4" type="video/mp4">
+        <source src="p1_aspiradora.mp4" type="video/mp4">
         Tu navegador no soporta la reproducción de video.
     </video>
 </div>
