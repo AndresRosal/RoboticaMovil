@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>P2: Sigue-líneas Visual - Andrés Rosal</title>
+</head>
+<body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333; background-color: #f9f9f9; margin: 0; padding: 0;">
+
+    <nav style="background: #2c3e50; padding: 15px; text-align: left;">
+        <a href="index.html" style="color: white; text-decoration: none; font-weight: bold;">← Volver al inicio</a>
+    </nav>
+
+    <section style="max-width: 850px; margin: 40px auto; background: white; padding: 40px; border-radius: 10px; box-shadow: 0 4px 20px rgba(0,0,0,0.1);">
+        
+        <h1 style="color: #c0392b; border-bottom: 3px solid #c0392b; padding-bottom: 10px; margin-top: 0;">Vlog: Práctica de Robótica Móvil - Sigue-líneas Visual (F1)</h1>
+        <p><strong>Autor:</strong> Andrés Rosal | <strong>Asignatura:</strong> Robótica Móvil</p>
+
+        <h2 style="color: #2c3e50;">1. Introducción y Herencia del Proyecto</h2>
+        <p>El objetivo de esta práctica es lograr que un monoplaza de Fórmula 1 recorra un circuito de forma autónoma guiándose por una línea roja.</p>
+        <p>Para esta solución, he partido de la base que ya trabajé el año pasado. Al tener claros los conceptos de control y procesamiento, la adaptación ha sido directa, permitiendo que el coche ruede con estabilidad y velocidad en los entornos actuales.</p>
+
+        <h2 style="color: #2c3e50;">2. Demostración en Circuito</h2>
+        <p>A continuación, muestro el comportamiento del mismo código en dos trazados distintos, demostrando la robustez del algoritmo:</p>
+        
+        <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 20px; margin: 30px 0;">
+            <div style="flex: 1; min-width: 300px;">
+                <p style="text-align: center; font-weight: bold;">Circuito 1: Trazado Estándar</p>
+                <video width="100%" controls style="border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.2);">
+                    <source src="f1_circuito_1.mp4" type="video/mp4">
+                </video>
+            </div>
+            <div style="flex: 1; min-width: 300px;">
+                <p style="text-align: center; font-weight: bold;">Circuito 2: Variantes de Curva</p>
+                <video width="100%" controls style="border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.2);">
+                    <source src="f1_circuito_2.mp4" type="video/mp4">
+                </video>
+            </div>
+        </div>
+
+        <h2 style="color: #2c3e50;">3. Procesamiento de Imagen (OpenCV)</h2>
+        <p>La visión del robot se basa en la librería <strong>OpenCV</strong> siguiendo estos pasos:</p>
+        <ul style="background: #fdf2f2; padding: 20px 40px; border-radius: 8px;">
+            <li><strong>Espacio HSV:</strong> Filtrado del color rojo más robusto frente a cambios de luz.</li>
+            <li><strong>ROI (Región de Interés):</strong> Análisis de una banda de píxeles específica para reducir carga computacional.</li>
+            <li><strong>Centroide:</strong> Cálculo del centro de la línea para determinar el error de posición respecto al eje del coche.</li>
+        </ul>
+
+        <h2 style="color: #2c3e50;">4. Estrategia de Control: Doble PID</h2>
+        <p>He implementado un sistema de control de bucle cerrado mediante dos PIDs independientes:</p>
+        <ol>
+            <li><strong>Control de Giro (W):</strong> Corrige la trayectoria. La componente derivativa es clave para eliminar oscilaciones y suavizar la entrada en curva.</li>
+            <li><strong>Control de Velocidad (V):</strong> Ajusta la aceleración. El coche reduce la velocidad proporcionalmente al error detectado, permitiendo frenar en curvas cerradas y exprimir la velocidad punta en las rectas.</li>
+        </ol>
+    </section>
+
+    <footer style="text-align: center; padding: 20px; color: #666; font-size: 0.8rem;">
+        &copy; 2024 Andrés Rosal - Prácticas de Robótica
+    </footer>
+
+</body>
+</html>
