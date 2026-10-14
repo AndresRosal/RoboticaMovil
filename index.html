@@ -1,34 +1,47 @@
-<!-- INICIO DEL VLOG ROBÓTICA -->
-<section style="max-width: 800px; margin: 40px auto; padding: 20px; font-family: Arial, sans-serif; line-height: 1.6; color: #333;">
-    <h1 style="color: #2c3e50; border-bottom: 2px solid #3498db; padding-bottom: 10px;">Vlog: Práctica de Robótica Móvil - Aspiradora Autónoma</h1>
-    <p><strong>Autor:</strong> Andrés Rosal<br>
-    <strong>Asignatura:</strong> Robótica Móvil</p>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Portafolio de Robótica - Andrés Rosal</title>
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; background-color: #f4f7f6; color: #333; margin: 0; padding: 0; }
+        header { background: #2c3e50; color: white; text-align: center; padding: 50px 20px; }
+        .container { max-width: 1000px; margin: 40px auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; padding: 20px; }
+        .card { background: white; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); overflow: hidden; transition: transform 0.3s; }
+        .card:hover { transform: translateY(-10px); }
+        .card-content { padding: 20px; }
+        .card-title { font-size: 1.5rem; margin: 0; color: #2c3e50; }
+        .card-desc { color: #666; margin: 15px 0; font-size: 0.95rem; }
+        .btn { display: inline-block; padding: 10px 20px; background: #3498db; color: white; text-decoration: none; border-radius: 5px; font-weight: bold; }
+        .btn-p2 { background: #e74c3c; } /* Rojo para el F1 */
+    </style>
+</head>
+<body>
 
-    <h2 style="color: #2980b9;">1. Introducción y Retos Técnicos</h2>
-    <p>El objetivo de esta práctica es programar el comportamiento de una aspiradora autónoma para que sea capaz de limpiar la mayor superficie posible de una vivienda. El algoritmo debe gestionar los movimientos del robot para evitar obstáculos y asegurar que no queden zonas sin recorrer, optimizando el tiempo de limpieza.</p>
-    
-    <p>Antes de explicar el funcionamiento, quería comentar que he tenido bastantes complicaciones técnicas con mi portátil para ejecutar el simulador. Por este motivo, entrego la práctica con una semana de retraso. Le agradezco que me haya facilitado el acceso a los laboratorios de la universidad para poder trabajar allí y completar la tarea, ya que era la única forma de avanzar. Disculpe las molestias por la demora.</p>
+<header>
+    <h1>Vlogs de Prácticas: Robótica Móvil</h1>
+    <p>Andrés Rosal | Universidad</p>
+</header>
 
-    <h2 style="color: #2980b9;">2. Demostración del Algoritmo</h2>
-    <p>A continuación, presento un vídeo que muestra el comportamiento del robot en el entorno de pruebas. Es importante notar que el vídeo es una muestra del funcionamiento de la lógica programada; aunque no se vea la limpieza de la casa completa por cuestiones de duración del clip, el algoritmo está diseñado para que, con el tiempo suficiente, la aspiradora cubra la totalidad de la superficie.</p>
-
-    <!-- Contenedor del video -->
-    <div style="text-align: center; margin: 30px 0;">
-        <video width="100%" controls style="border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.3); max-width: 700px;">
-            <source src="p1_aspiradora.mp4" type="video/mp4">
-            Tu navegador no soporta la reproducción de video.
-        </video>
+<div class="container">
+    <!-- TARJETA PRÁCTICA 1 -->
+    <div class="card">
+        <div class="card-content">
+            <h2 class="card-title">P1: Aspiradora Autónoma</h2>
+            <p class="card-desc">Implementación de una máquina de estados para limpieza de superficies con sensores láser y patrones de espiral.</p>
+            <a href="p1_aspiradora.html" class="btn">Ver Vlog de Práctica</a>
+        </div>
     </div>
 
-    <h2 style="color: #2980b9;">3. Estrategia de Implementación: Máquina de Estados</h2>
-    <p>Para lograr una cobertura eficiente, he diseñado una <strong>Máquina de Estados Finitos</strong>. El robot alterna entre diferentes tipos de movimiento según lo que detectan sus sensores:</p>
-    <ul>
-        <li><strong>Retroceso y Giro:</strong> Cuando el sensor láser detecta un obstáculo cerca (menos de 0.35m), el robot retrocede un poco y gira hacia una dirección aleatoria. He programado tanto el tiempo de giro como el sentido (izquierda o derecha) de forma aleatoria para evitar que el robot se quede atrapado en bucles o esquinas.</li>
-        <li><strong>Movimiento Recto:</strong> Tras girar, el robot avanza en línea recta para desplazarse a una nueva zona.</li>
-        <li><strong>Movimiento en Espiral:</strong> Si el robot detecta que tiene mucho espacio libre a su alrededor, activa el modo espiral. Incrementando la velocidad lineal poco a poco, consigue limpiar grandes áreas abiertas de forma mucho más eficiente que con movimientos aleatorios.</li>
-    </ul>
+    <!-- TARJETA PRÁCTICA 2 -->
+    <div class="card">
+        <div class="card-content">
+            <h2 class="card-title">P2: Sigue-líneas Visual (F1)</h2>
+            <p class="card-desc">Control reactivo mediante visión artificial (OpenCV) y doble PID para conducción autónoma en circuito.</p>
+            <a href="p2_follow_line.html" class="btn btn-p2">Ver Vlog de Práctica</a>
+        </div>
+    </div>
+</div>
 
-    <h2 style="color: #2980b9;">4. Control y Sensores</h2>
-    <p>He configurado un filtrado de los datos del láser para que el robot reaccione correctamente incluso si el sensor devuelve valores no válidos en algún momento. El control de la velocidad y el giro está ajustado para que las transiciones entre estados sean fluidas, permitiendo que la aspiradora reaccione rápido ante las paredes mientras mantiene un patrón de limpieza constante en las zonas despejadas.</p>
-</section>
-<!-- FIN DEL VLOG -->
+</body>
+</html>
