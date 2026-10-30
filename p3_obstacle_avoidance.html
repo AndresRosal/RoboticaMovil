@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>P3: Evitación de Obstáculos - Andrés Rosal</title>
+</head>
+<body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333; background-color: #f9f9f9; margin: 0; padding: 0;">
+
+    <nav style="background: #2c3e50; padding: 15px; text-align: left;">
+        <a href="index.html" style="color: white; text-decoration: none; font-weight: bold;">← Volver al inicio</a>
+    </nav>
+
+    <section style="max-width: 850px; margin: 40px auto; background: white; padding: 40px; border-radius: 10px; box-shadow: 0 4px 20px rgba(0,0,0,0.1);">
+
+        <h1 style="color: #1e8449; border-bottom: 3px solid #1e8449; padding-bottom: 10px; margin-top: 0;">Vlog: Práctica de Robótica Móvil - Evitación de Obstáculos</h1>
+        <p><strong>Autor:</strong> Andrés Rosal | <strong>Asignatura:</strong> Robótica Móvil</p>
+
+        <h2 style="color: #2c3e50;">1. Introducción</h2>
+        <p>El objetivo de esta práctica es que el robot recorra una secuencia de objetivos de forma autónoma, esquivando los obstáculos que encuentra por el camino. La navegación no sigue un mapa ni una trayectoria planificada: en cada instante se calcula hacia dónde debe moverse a partir de lo que ve el láser y de dónde está el siguiente punto.</p>
+        <p>La idea es un campo de potenciales. Un vector tira del robot hacia el objetivo y otro lo empuja lejos de lo que tiene cerca. La suma de los dos marca la dirección de avance.</p>
+
+        <h2 style="color: #2c3e50;">2. Demostración</h2>
+        <p>En el vídeo se ve al robot ir de objetivo en objetivo. Las flechas de la interfaz muestran la atracción, la repulsión y la resultante en cada momento:</p>
+
+        <div style="text-align: center; margin: 30px 0;">
+            <video width="100%" controls style="border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.3); max-width: 700px;">
+                <source src="p3_obstacle_avoidance.mp4" type="video/mp4">
+                Tu navegador no soporta la reproducción de video.
+            </video>
+        </div>
+
+        <h2 style="color: #2c3e50;">3. Campos de potencial</h2>
+        <p>Los dos vectores se calculan en el sistema de referencia del robot y se combinan antes de decidir velocidad y giro:</p>
+        <ul style="background: #eafaf1; padding: 20px 40px; border-radius: 8px;">
+            <li><strong>Atracción:</strong> El objetivo se pasa a coordenadas locales (delante del robot es el eje X). Ese vector se multiplica por <strong>K_ATT = 2</strong> y su módulo se limita entre 1 y 4, para que ni desaparezca cuando el punto está cerca ni domine cuando está muy lejos.</li>
+            <li><strong>Repulsión:</strong> Con las 180 lecturas del láser, cada haz aporta una magnitud <strong>1/d²</strong> en su dirección. Se promedia y se invierte el signo, de modo que el vector apunta en sentido contrario a los obstáculos. Después se escala con <strong>K_REP = 5</strong>, más alto que la atracción, para que las paredes pesen más que el objetivo cuando están cerca.</li>
+            <li><strong>Resultante:</strong> Suma directa de atracción y repulsión, sin promediar. Su módulo y su ángulo son los que usa el control. Las tres fuerzas se dibujan en la interfaz para ver cómo se compensan.</li>
+        </ul>
+
+        <h2 style="color: #2c3e50;">4. Control de velocidad y giro</h2>
+        <p>A partir de la resultante aplico dos leyes distintas:</p>
+        <ol>
+            <li><strong>Giro (W):</strong> Un controlador <strong>PD</strong> (Kp = 2, Kd = 1) intenta dejar el ángulo de la resultante en cero, es decir, alinear el robot con la dirección de avance. La salida se satura a ±15 para que el giro no se dispare.</li>
+            <li><strong>Velocidad lineal (V):</strong> Si la resultante apunta hacia delante (ángulo menor de 90°), la velocidad es el propio módulo del vector: cuanto más clara es la dirección libre, más rápido avanza. Si apunta hacia atrás y el objetivo queda detrás, el robot se para y gira sobre sí mismo. Si el obstáculo está delante pero el objetivo sigue por delante, avanza muy despacio (0,2) mientras corrige el rumbo.</li>
+        </ol>
+        <p>Cuando la distancia al punto baja de 1 m, lo marco como alcanzado y paso al siguiente. Si en algún ciclo tanto la velocidad como el giro quedan prácticamente a cero, fuerzo un giro pequeño para que el robot no se quede bloqueado entre dos fuerzas que se cancelan.</p>
+    </section>
+
+    <footer style="text-align: center; padding: 20px; color: #666; font-size: 0.8rem;">
+        &copy; 2024 Andrés Rosal - Prácticas de Robótica
+    </footer>
+
+</body>
+</html>
