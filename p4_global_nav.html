@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>P4: Navegación Global - Andrés Rosal</title>
+</head>
+<body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333; background-color: #f9f9f9; margin: 0; padding: 0;">
+
+    <nav style="background: #2c3e50; padding: 15px; text-align: left;">
+        <a href="index.html" style="color: white; text-decoration: none; font-weight: bold;">← Volver al inicio</a>
+    </nav>
+
+    <section style="max-width: 850px; margin: 40px auto; background: white; padding: 40px; border-radius: 10px; box-shadow: 0 4px 20px rgba(0,0,0,0.1);">
+
+        <h1 style="color: #6c3483; border-bottom: 3px solid #6c3483; padding-bottom: 10px; margin-top: 0;">Blog: Práctica de Robótica Móvil - Navegación Global</h1>
+        <p><strong>Autor:</strong> Andrés Rosal | <strong>Asignatura:</strong> Robótica Móvil</p>
+
+        <h2 style="color: #2c3e50;">1. Introducción</h2>
+        <p>El objetivo de esta práctica es que un coche llegue por sí solo a cualquier punto de una ciudad que se marque con un clic en el mapa. A diferencia de la práctica anterior, aquí el robot no reacciona a lo que tiene delante: conoce el mapa completo desde el principio y lo usa para saber por dónde ir.</p>
+        <p>La solución se basa en el algoritmo <strong>wavefront</strong> (frente de onda). Desde el destino se propaga un coste por las calles, de modo que cada celda sabe lo lejos que está de él. Después, el coche solo tiene que avanzar en cada momento hacia las celdas de menor coste.</p>
+
+        <h2 style="color: #2c3e50;">2. Demostración</h2>
+        <p>En el vídeo, el panel de la izquierda muestra el mapa con el destino y la posición del coche, y el de la derecha el mapa de costes: cuanto más clara es una calle, más cerca está del destino. El coche recorre la ruta hasta alcanzar el primer objetivo. Después marco un segundo punto, se calcula su mapa de costes y el coche arranca hacia él; el vídeo termina al poco de iniciar este segundo trayecto, así que no se ve la llegada.</p>
+
+        <div style="text-align: center; margin: 30px 0;">
+            <video width="100%" controls style="border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.3); max-width: 700px;">
+                <source src="P4_global_nav.mp4" type="video/mp4">
+                Tu navegador no soporta la reproducción de video.
+            </video>
+        </div>
+
+        <h2 style="color: #2c3e50;">3. Planificación: mapa de costes</h2>
+        <p>Cada vez que llega un nuevo destino, cargo el mapa de la ciudad y calculo el camino en estos pasos:</p>
+        <ul style="background: #f4ecf7; padding: 20px 40px; border-radius: 8px;">
+            <li><strong>Conversión de coordenadas:</strong> El mundo mide 500 m de lado (de -250 a 250) y el mapa tiene 400 columnas, por lo que cada celda equivale a 1,25 m. Tanto el destino como la posición del coche se convierten a celdas antes de operar con ellos.</li>
+            <li><strong>Propagación del frente de onda:</strong> El destino empieza con coste 0 y, con una cola, el coste se extiende a los 8 vecinos de cada celda. Moverse en lateral cuesta <strong>0,1</strong> y en diagonal <strong>0,12</strong>. Si una celda se alcanza por un camino más barato, se actualiza y vuelve a la cola. Los obstáculos nunca se expanden.</li>
+            <li><strong>Parada anticipada:</strong> No hace falta recorrer toda la ciudad. Cuando el frente llega a la posición del coche, proceso 1000 celdas más para tener margen alrededor y termino. Por eso, en el vídeo, las calles más alejadas de la ruta se quedan en negro.</li>
+            <li><strong>Imagen de costes:</strong> Normalizo los costes a una imagen de 0 a 255 e invierto los valores: el destino queda en blanco y las celdas se oscurecen al alejarse. Las celdas sin calcular y los obstáculos quedan en negro.</li>
+            <li><strong>Margen de seguridad:</strong> Por último, pinto de negro una franja de 3 celdas (unos 3,75 m) alrededor de cada obstáculo. Esto no cambia los costes calculados, pero el coche no puede elegir esas celdas y así evita pegarse a las paredes o recortar las esquinas.</li>
+        </ul>
+
+        <h2 style="color: #2c3e50;">4. Navegación y control</h2>
+        <p>Con el mapa de costes listo, el coche repite este ciclo cada 0,1 segundos hasta llegar:</p>
+        <ol>
+            <li><strong>Siguiente paso:</strong> Miro las celdas del perímetro de un cuadrado de radio 5 alrededor del coche y elijo la más clara, descartando las negras. Esa celda es el punto hacia el que dirigirse en ese instante.</li>
+            <li><strong>Giro (W):</strong> Un control proporcional (K_W = 2) corrige la diferencia entre la orientación del coche y la dirección hacia ese punto. El ángulo se normaliza entre -180° y 180° para girar siempre por el lado más corto, y la salida se satura a ±5,5.</li>
+            <li><strong>Velocidad lineal (V):</strong> Es proporcional a la distancia hasta el siguiente paso (K_V = 1), con un máximo de 5. Como ese punto siempre está a 5 celdas o más, en la práctica la velocidad se mantiene fija en 5, tal como se ve en las trazas del vídeo.</li>
+        </ol>
+        <p>Cuando el coche está a menos de 5 celdas del destino (unos 6 m), doy el objetivo por alcanzado, lo detengo y espero un nuevo clic. Si el clic cae sobre un obstáculo, lo descarto y sigo esperando. El coche solo atiende a un nuevo destino cuando ha terminado el trayecto actual.</p>
+    </section>
+
+    <footer style="text-align: center; padding: 20px; color: #666; font-size: 0.8rem;">
+        &copy; 2024 Andrés Rosal - Prácticas de Robótica
+    </footer>
+
+</body>
+</html>
